@@ -299,7 +299,7 @@ void State::buildRemote(ref<Store> destStore,
         unsigned int remoteVersion;
 
         try {
-            to << SERVE_MAGIC_1 << 0x205;
+            to << SERVE_MAGIC_1 << 0x206;
             to.flush();
 
             unsigned int magic = readInt(from);
