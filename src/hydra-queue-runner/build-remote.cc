@@ -218,7 +218,7 @@ DrvOutputs getBuiltOutputs(Store & store, const int remoteVersion, FdSource & fr
     DrvOutputs builtOutputs;
     if (GET_PROTOCOL_MINOR(remoteVersion) >= 6) {
         builtOutputs
-            = worker_proto::read(store, from, Phantom<DrvOutputs> {});
+            = WorkerProto<DrvOutputs>::read(store, from);
     } else {
         // If the remote is too old to handle CA derivations, we can’t get this
         // far anyways
@@ -558,7 +558,7 @@ void State::buildRemote(ref<Store> destStore,
         }
 
         /* Register the outputs of the newly built drv */
-        if (settings.isExperimentalFeatureEnabled(Xp::CaDerivations)) {
+        if (experimentalFeatureSettings.isEnabled(Xp::CaDerivations)) {
           auto outputHashes = staticOutputHashes(*localStore, *step->drv);
           for (auto & [outputId, realisation] : builtOutputs) {
               // Register the resolved drv output
